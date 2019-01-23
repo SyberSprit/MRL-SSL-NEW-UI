@@ -1,0 +1,8 @@
+﻿table, th, td {
+  border: 5px solid black;
+  border-collapse: collapse;
+}
+.aParent div {
+  float: left;
+  clear: none;
+}
