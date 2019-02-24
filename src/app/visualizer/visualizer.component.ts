@@ -1,4 +1,4 @@
-﻿import { Component, ViewChild, OnInit, HostListener, ElementRef } from '@angular/core';
+import { Component, ViewChild, OnInit, HostListener, ElementRef } from '@angular/core';
 
 @Component({
     selector: 'app-visualizer',
@@ -19,8 +19,8 @@ export class VisualizerComponent implements OnInit {
     goalSize: number = 1.2;
     damgerZoneSize: number = 2.4;
     bool = true;
-    fieldHeight: number;
-    fieldWidth: number;
+    fieldHeight: number = this.h - 2 * this.offset;
+    fieldWidth: number = this.fieldHeight / (12 / 9);
     lastX = this.w / 2;
     lastY = this.h / 2;
     dragged = true;
@@ -31,61 +31,66 @@ export class VisualizerComponent implements OnInit {
 
     ngOnInit() {
         this.context = (<HTMLCanvasElement>this.canvasRef.nativeElement).getContext('2d');
-        this.Drawfield(this.context);
-        this.DrawBall(this.context, 4.5, 6);
-        this.DrawRobot(this.context, 12, "yellow", 0, 2, 2);
-        this.DrawRobot(this.context, 4, "yellow", 0, 4, 2);
-        this.DrawRobot(this.context, 5, "yellow", 0, 5, 2);
-        this.DrawRobot(this.context, 2, "yellow", 0, 7, 2);
-        this.DrawRobot(this.context, 8, "yellow", 0, 3.5, 3.5);
-        this.DrawRobot(this.context, 10, "yellow", 0, 4.5, 3.5);
-        this.DrawRobot(this.context, 22, "yellow", 0, 5.5, 3.5);
-        this.DrawRobot(this.context, 7, "yellow", 0, 3.5, 5);
-        this.DrawRobot(this.context, 9, "yellow", 180, 4.5, 5);
-        this.DrawRobot(this.context, 11, "yellow", 0, 5.5, 5);
-
-        this.DrawRobot(this.context, 12, "blue", 0, 2, 10);
-        this.DrawRobot(this.context, 4, "blue", 0, 4, 10);
-        this.DrawRobot(this.context, 5, "blue", 0, 5, 10);
-        this.DrawRobot(this.context, 2, "blue", 0, 7, 10);
-        this.DrawRobot(this.context, 8, "blue", 0, 3.5, 8.5);
-        this.DrawRobot(this.context, 10, "blue", 0, 4.5, 8.5);
-        this.DrawRobot(this.context, 22, "blue", 0, 5.5, 8.5);
-        this.DrawRobot(this.context, 7, "blue", 0, 3.5, 7);
-        this.DrawRobot(this.context, 9, "blue", 0, 4.5, 7);
-        this.DrawRobot(this.context, 11, "blue", 0, 5.5, 7);
+        this.Draw();
     }
     zoom(event) {
 
         console.log(this.fieldWidth);
         console.log(event.pageX + "|||" + event.pageY);
         if (event.deltaY < 0) {
-            this.zoomScale = this.zoomScale + 0.5;
+            this.zoomScale = this.zoomScale + 0.1;
             this.context.save();
             this.context.clearRect(0, 0, this.w, this.h + this.offset);
             //this.context.translate(event.pageX, event.pageY );
 
             this.context.scale(this.zoomScale, this.zoomScale);
-            this.Drawfield(this.context);
+            this.Draw();
+
             this.context.restore();
         }
         else if (event.deltaY > 0) {
-            this.zoomScale = this.zoomScale - 0.5;
+            this.zoomScale = this.zoomScale - 0.1;
             this.context.save();
             this.context.clearRect(0, 0, this.w, this.h + this.offset);
             // this.context.translate(event.pageX , event.pageY );
 
             this.context.scale(this.zoomScale, this.zoomScale);
-            this.Drawfield(this.context);
+            this.Draw();
+
             this.context.restore();
         }
 
 
     }
+    Draw(){
+      this.Drawfield(this.context);
+      this.DrawBall(this.context, 4.5, 6);
+      this.DrawRobot(this.context, 12, "yellow", 0, 2, 2);
+      this.DrawRobot(this.context, 4, "yellow", 0, 4, 2);
+      this.DrawRobot(this.context, 5, "yellow", 0, 5, 2);
+      this.DrawRobot(this.context, 2, "yellow", 0, 7, 2);
+      this.DrawRobot(this.context, 8, "yellow", 0, 3.5, 3.5);
+      this.DrawRobot(this.context, 10, "yellow", 0, 4.5, 3.5);
+      this.DrawRobot(this.context, 22, "yellow", 0, 5.5, 3.5);
+      this.DrawRobot(this.context, 7, "yellow", 0, 3.5, 5);
+      this.DrawRobot(this.context, 9, "yellow", 180, 4.5, 5);
+      this.DrawRobot(this.context, 11, "yellow", 0, 5.5, 5);
+
+      this.DrawRobot(this.context, 12, "blue", 0, 2, 10);
+      this.DrawRobot(this.context, 4, "blue", 0, 4, 10);
+      this.DrawRobot(this.context, 5, "blue", 0, 5, 10);
+      this.DrawRobot(this.context, 2, "blue", 0, 7, 10);
+      this.DrawRobot(this.context, 8, "blue", 0, 3.5, 8.5);
+      this.DrawRobot(this.context, 10, "blue", 0, 4.5, 8.5);
+      this.DrawRobot(this.context, 22, "blue", 0, 5.5, 8.5);
+      this.DrawRobot(this.context, 7, "blue", 0, 3.5, 7);
+      this.DrawRobot(this.context, 9, "blue", 0, 4.5, 7);
+      this.DrawRobot(this.context, 11, "blue", 0, 5.5, 7);
+    }
     Drawfield(context) {
 
-        this.fieldHeight = this.h - this.offset - 30;
-        this.fieldWidth = this.fieldHeight / (12 / 9);
+        // this.fieldHeight = this.h - this.offset - 30;
+        // this.fieldWidth = this.fieldHeight / (12 / 9);
 
         context.beginPath();
         context.lineWidth = this.Convert(0.01);
